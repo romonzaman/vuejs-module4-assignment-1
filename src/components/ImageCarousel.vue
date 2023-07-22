@@ -1,36 +1,44 @@
 <script setup>
 
+
 import { ref, reactive } from 'vue'
 const images = reactive([
     {
         id: 1,
         ImageSmallUrl: '/img/picture1.jpeg',
-        imageLargeUrl: '/img/picture1_large.jpeg'
+        imageLargeUrl: '/img/picture1_large.jpeg',
+        title: 'Kitchen Workstation',
+        subtitle: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
     },
     {
         id: 2,
         ImageSmallUrl: '/img/picture2.jpeg',
-        imageLargeUrl: '/img/picture2_large.jpeg'
+        imageLargeUrl: '/img/picture2_large.jpeg',
+        title: 'MakeUp Station',
+        subtitle: 'aliquam molestiae consectetur dolor, temporibus reprehenderit! '
     },
     {
         id: 3,
         ImageSmallUrl: '/img/picture3.jpeg',
-        imageLargeUrl: '/img/picture3_large.jpeg'
+        imageLargeUrl: '/img/picture3_large.jpeg',
+        title: 'TV cabinet',
+        subtitle: 'ipsam minus porro temporibus eos provident nisi quod molestias!'
     },
     {
         id: 4,
         ImageSmallUrl: '/img/picture4.jpeg',
-        imageLargeUrl: '/img/picture4_large.jpeg'
+        imageLargeUrl: '/img/picture4_large.jpeg',
+        title: 'Washing place',
+        subtitle: 'dolorum quibusdam magni voluptatibus aperiam neque odit!'
     }
 ])
+
 const currentSlide = ref(0)
 
 const nextSlide = () => {
     currentSlide.value++
     if (currentSlide.value >= images.length)
         currentSlide.value = 0
-
-    bgUrl.value = images[currentSlide.value].ImageSmallUrl
 }
 
 const prevSlide = () => {
@@ -38,11 +46,6 @@ const prevSlide = () => {
         currentSlide.value = images.length - 1
     else
         currentSlide.value--
-    bgUrl.value = images[currentSlide.value].ImageSmallUrl
-}
-
-const updateImage = () => {
-    bgUrl.value = images[currentSlide.value].ImageSmallUrl
 }
 
 let timerPause = 0
@@ -57,22 +60,24 @@ const timerFunc = () => {
 
 timerFunc()
 
-const bgUrl = ref(images[0].ImageSmallUrl)
-
 </script>
 
 <template>
     <div class="relative m-5 bg-gray-50">
         <!-- image -->
         <div class="flex justify-center items-center relative overflow-hidden rounded-lg p-2 ">
-            <img class="h-[75vh] mb-10" :src="bgUrl">
+            <img class="h-[75vh] mb-10" :src="images[currentSlide].ImageSmallUrl">
         </div>
-
+        <div class="absolute inset-x-[15%] bottom-12 py-5 text-center text-white md:block">
+            <h5 class="text-xl">{{ images[currentSlide].title }}</h5>
+            <p class="text-sm truncate  text-center">{{ images[currentSlide].subtitle }}
+            </p>
+        </div>
         <!-- Slider indicators -->
         <div class="absolute z-30 flex space-x-3  -translate-x-1/2 bottom-5 left-1/2">
             <button v-for="iml in images.length" :key="iml" id="carousel-indicator-1" type="button"
                 class="w-3 h-3 rounded-full border-white" :class="currentSlide == (iml - 1) ? 'bg-red-700' : 'bg-gray-600'"
-                @click="timerPause = 1; currentSlide = (iml - 1); updateImage()"></button>
+                @click="timerPause = 1; currentSlide = (iml - 1)"></button>
         </div>
 
         <!-- Slider controls -->
@@ -102,7 +107,6 @@ const bgUrl = ref(images[0].ImageSmallUrl)
             </span>
         </button>
     </div>
-
 </template>
 
 <style scoped>
